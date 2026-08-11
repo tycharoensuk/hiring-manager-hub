@@ -38,6 +38,8 @@
   <script type="text/babel">
     const { useState } = React;
 
+    const HC_REQUEST_URL = "https://headcount-dashboard-tycharoensuk-5506s-projects.vercel.app/submit";
+
     const Callout = ({ icon, bg, border, text, children }) => (
       <div className={`${bg} ${border} border rounded-2xl p-4 mb-6 flex gap-3`}>
         <span className="text-lg flex-shrink-0">{icon}</span>
@@ -82,7 +84,7 @@
           </div>
           {items.map((item, i) => (
             <label key={i} className="flex items-start gap-3 py-1.5 cursor-pointer">
-              <input type="checkbox" checked={!!checked[i]} onChange={() => toggle(i)} className="mt-0.5 h-4 w-4 cursor-pointer flex-shrink-0 accent-coral" style={{accentColor:'#E05A3A'}} />
+              <input type="checkbox" checked={!!checked[i]} onChange={() => toggle(i)} className="mt-0.5 h-4 w-4 cursor-pointer flex-shrink-0" style={{accentColor:'#E05A3A'}} />
               <span className={`text-sm leading-relaxed transition-colors ${checked[i] ? "line-through text-stone-400" : "text-stone-700"}`}>{item}</span>
             </label>
           ))}
@@ -97,14 +99,6 @@
       </div>
     );
 
-    const navCards = [
-      { id: "roleApproval", icon: "📝", title: "Getting a Role Approved", desc: "Submit a headcount request, build your business case, and get sign-off from Talent & Finance.", tag: "Start here before you hire." },
-      { id: "resignation", icon: "🚶", title: "When Someone Resigns", desc: "What to do in the first 24 hours, knowledge transfer, and when to trigger a backfill.", tag: "Act fast, do it right." },
-      { id: "preStart", icon: "⏰", title: "3 Weeks Before Start Date", desc: "Your pre-start checklist. Everything IT, people, and culture need from you before Day 1.", tag: "Don't get caught unprepared." },
-      { id: "newStarter", icon: "🎉", title: "When Your New Starter Arrives", desc: "Day 1 agenda, first week rituals, and what great looks like in the first month.", tag: "Make their first impression count." },
-      { id: "onboarding", icon: "📈", title: "Onboarding Plan Template", desc: "A ready-to-use 30/60/90 day plan, 1:1 framework, and success criteria to adapt for your hire.", tag: "Set them up to win." },
-    ];
-
     const CoralBtn = ({ href, children }) => (
       <a href={href} target="_blank" rel="noopener noreferrer"
         className="inline-block text-white text-sm px-6 py-2.5 rounded-full font-semibold transition-opacity hover:opacity-90"
@@ -112,6 +106,14 @@
         {children}
       </a>
     );
+
+    const navCards = [
+      { id: "roleApproval", icon: "📝", title: "Getting a Role Approved", desc: "Submit a headcount request, build your business case, and get sign-off from Talent & Finance.", tag: "Start here before you hire." },
+      { id: "resignation", icon: "🚶", title: "When Someone Resigns", desc: "What to do in the first 24 hours, knowledge transfer, and when to trigger a backfill.", tag: "Act fast, do it right." },
+      { id: "preStart", icon: "⏰", title: "3 Weeks Before Start Date", desc: "Your pre-start checklist. Everything IT, people, and culture need from you before Day 1.", tag: "Don't get caught unprepared." },
+      { id: "newStarter", icon: "🎉", title: "When Your New Starter Arrives", desc: "Day 1 agenda, first week rituals, and what great looks like in the first month.", tag: "Make their first impression count." },
+      { id: "onboarding", icon: "📈", title: "Onboarding Plan Template", desc: "A ready-to-use 30/60/90 day plan, 1:1 framework, and success criteria to adapt for your hire.", tag: "Set them up to win." },
+    ];
 
     const HomePage = ({ setPage }) => (
       <div>
@@ -121,14 +123,11 @@
             <strong>Welcome, Hiring Manager.</strong> Everything you need to hire well, onboard confidently, and set your people up to succeed — in one place.
           </div>
         </div>
-
         <div className="rounded-2xl p-6 mb-8 text-center" style={{backgroundColor:'#1C1A18'}}>
           <p className="text-xs mb-2 uppercase tracking-widest" style={{color:'#9C958E'}}>One question guides every step</p>
           <p className="font-serif font-bold text-xl leading-snug" style={{color:'#EDE8E3'}}>"Am I giving this person the best possible chance to succeed?"</p>
         </div>
-
         <h2 className="font-serif font-bold text-ink mb-4 text-base">Your Hiring Manager Map</h2>
-
         <div className="space-y-3 mb-8">
           {navCards.map(card => (
             <button key={card.id} onClick={() => setPage(card.id)}
@@ -136,16 +135,16 @@
               <div className="flex items-start gap-4">
                 <span className="text-2xl flex-shrink-0 mt-0.5">{card.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-ink mb-0.5 group-hover:text-coral transition-colors" style={{'--tw-text-opacity':1}}>{card.title}</p>
+                  <p className="font-semibold text-ink mb-0.5" style={{transition:'color 0.15s'}}
+                    onMouseEnter={e => e.target.style.color='#E05A3A'} onMouseLeave={e => e.target.style.color=''}>{card.title}</p>
                   <p className="text-sm text-stone-500 mb-1.5 leading-relaxed">{card.desc}</p>
                   <span className="text-xs text-stone-400 italic">{card.tag}</span>
                 </div>
-                <span className="text-stone-300 group-hover:text-coral transition-colors text-lg flex-shrink-0">→</span>
+                <span className="text-stone-300 text-lg flex-shrink-0">→</span>
               </div>
             </button>
           ))}
         </div>
-
         <div className="rounded-2xl p-5 flex gap-3 border" style={{backgroundColor:'#FDF6F3', borderColor:'#F0C4B4'}}>
           <span className="text-lg flex-shrink-0">⚡</span>
           <p className="text-sm leading-relaxed" style={{color:'#7A2E18'}}><strong>The hiring manager is the single biggest factor in whether a new starter succeeds.</strong> Show up, be present, and invest the time — it compounds fast.</p>
@@ -161,7 +160,7 @@
         </Section>
         <Section title="📄 Step 1: Submit the Headcount Request">
           <p className="text-sm text-stone-600 mb-4 leading-relaxed">Fill this in as completely as possible. Vague requests slow everything down.</p>
-          <CoralBtn href="https://app.notion.com/p/549e480f19c94de4931ae4a1747ac186">Submit Headcount Request →</CoralBtn>
+          <CoralBtn href={HC_REQUEST_URL}>Submit Headcount Request →</CoralBtn>
         </Section>
         <Section title="💼 What to Include in Your Business Case">
           <Accordion title="Why is this role needed now?"><p>Be specific about what's breaking, slowing down, or won't happen without this person. Tie it to a team goal or company priority.</p><p className="mt-2 italic text-stone-500 bg-white rounded p-2 border border-stone-200">"We're launching in the US market in Q3 and don't have anyone who can own enterprise sales cycles. Without this hire, our US revenue target is at risk."</p></Accordion>
@@ -200,7 +199,7 @@
           <div className="rounded-2xl p-4 space-y-2 mb-4" style={{backgroundColor:'#EDE8E3'}}>
             {["Submit the headcount request form — even a straight backfill needs to be logged","Flag urgency — if there's a hard dependency on the notice period, say so","Talent will fast-track backfills where there's a clear business impact"].map((item,i) => <p key={i} className="text-sm text-stone-700 flex gap-2"><span className="font-bold flex-shrink-0" style={{color:'#E05A3A'}}>{i+1}.</span>{item}</p>)}
           </div>
-          <CoralBtn href="https://app.notion.com/p/549e480f19c94de4931ae4a1747ac186">Submit Headcount Request →</CoralBtn>
+          <CoralBtn href={HC_REQUEST_URL}>Submit Headcount Request →</CoralBtn>
         </Section>
         <Section title="❓ Common Questions">
           <Accordion title="What's the notice period at Blinq?"><p>Notice periods are in the employment contract. The People team can confirm. Typically 2–4 weeks for most roles, longer for senior positions.</p></Accordion>
@@ -323,8 +322,7 @@
       const card = navCards.find(c => c.id === page);
       const PageComponent = pageMap[page];
       return (
-        <div className="min-h-screen" style={{backgroundColor:'#EDE8E3', fontFamily:"'Inter', system-ui, sans-serif"}}>
-          {/* Nav bar */}
+        <div className="min-h-screen" style={{backgroundColor:'#EDE8E3'}}>
           <div className="border-b border-stone-200 bg-white/70 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
               <button onClick={() => setPage("home")} className="flex items-center gap-2 hover:opacity-70 transition-opacity">
@@ -339,15 +337,11 @@
               )}
             </div>
           </div>
-
           <div className="max-w-2xl mx-auto px-4 py-8">
-            {/* Page header */}
             {page !== "home" && (
-              <div className="mb-6">
-                <div className="flex items-center gap-3">
-                  <span className="text-4xl">{card?.icon}</span>
-                  <h1 className="font-serif font-black text-2xl text-ink leading-tight">{card?.title}</h1>
-                </div>
+              <div className="mb-6 flex items-center gap-3">
+                <span className="text-4xl">{card?.icon}</span>
+                <h1 className="font-serif font-black text-2xl text-ink leading-tight">{card?.title}</h1>
               </div>
             )}
             {page === "home" && (
@@ -356,13 +350,9 @@
                 <p className="text-stone-500 text-sm">Talent Team · Blinq</p>
               </div>
             )}
-
-            {/* Content card */}
             <div className="bg-white rounded-3xl shadow-sm border border-stone-200 p-6">
               {page === "home" ? <HomePage setPage={setPage} /> : <PageComponent />}
             </div>
-
-            {/* Footer dots */}
             {page !== "home" && (
               <div className="mt-4 flex justify-center gap-1.5 items-center">
                 {navCards.map(c => (
@@ -372,7 +362,6 @@
                 ))}
               </div>
             )}
-
             <p className="text-center text-xs text-stone-400 mt-6">Blinq Talent Team · {new Date().getFullYear()}</p>
           </div>
         </div>
